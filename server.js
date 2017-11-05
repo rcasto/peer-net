@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 server.listen(port, () => console.log(`Server started on port ${port}`));
 
 socketServer.on('connection', (socket, req) => {
+    console.log('Client connected');
     socket.on('message', message => {
         console.log(`Received: ${message}`);
     });
