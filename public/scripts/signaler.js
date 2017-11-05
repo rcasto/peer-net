@@ -15,16 +15,16 @@ var Socket = (function () {
             console.log('Connected');
             _isConnected = true;
         });
-        ws.addEventListener('close', function () {
-            console.log('Connection closed');
-            _isConnected = false;
-        });
         ws.addEventListener('message', function (message) {
             console.log('Received message: ' + JSON.stringify(message.data));
         });
+        ws.addEventListener('close', function () {
+            console.log('Connection closed');
+            cleanup();
+        });
         ws.addEventListener('error', function (error) {
             console.error('Error with connection: ' + JSON.stringify(error));
-            _isConnected = false;
+            cleanup();
         });
     }
 
@@ -38,6 +38,11 @@ var Socket = (function () {
 
     function isConnected() {
         return _isConnected;
+    }
+
+    function cleanup() {
+        _isConnected = false;
+        ws = null;
     }
 
     return {
