@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "debug": "node --inspect-brk server.js"
   },
   "author": "Richie Casto",
   "license": "ISC",
