@@ -43,7 +43,7 @@
             currentJSONArray = Helpers.tryParseJSON(currentText);
             if (currentJSONArray) {
                 currentJSONArray.push(Helpers.tryParseJSON(text));                
-                textArea.value = JSON.stringify(currentJSON);
+                textArea.value = JSON.stringify(currentJSONArray);
             }
         } else {
             textArea.value = JSON.stringify([Helpers.tryParseJSON(text)]);
