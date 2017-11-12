@@ -1,0 +1,24 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+#peer-container {
+    width: 480px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+#peer-header {
+    display: inline-block;
+    margin-bottom: 6px;
+}
+#peer-sdp {
+    display: block;
+    height: 320px;
+    margin-bottom: 6px;
+    resize: none;
+}
+#peer-sdp:read-only {
+    opacity: 0.4;
+}
+#peer-offer, #peer-copy, #peer-offer-accept, #peer-sdp {
+    width: 100%;
+}

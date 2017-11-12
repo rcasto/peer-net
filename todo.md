@@ -19,3 +19,11 @@ will be the seed of the network
 - Nodes are weakly linked, meaning they are only connected to one other node in the network
 - It's always preferred to connect to a node already in the peer network
 - Whenever a node disconnects, all of it's connected nodes must re-go through the connect process
+
+# Ideas on avoiding the need for a server
+Utilize an Azure Blob to hold data pertinent to establishing a connection
+* Offer
+* Answer
+* ICE Candidates
+
+Can you gather (offer or answer) + all ICE candidates in one go?

@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">            
+        <link rel="stylesheet" href="/styles/main.css" />
     </head>
     <body>
-        <button id="peer-connect">Connect</button>
-
+        <div id="peer-container">
+            <textarea id="peer-sdp" placeholder="Paste offer SDP of peer if you wish"></textarea>
+            <div id="peer-buttons">
+                <button id="peer-offer">Create Offer</button>
+                <button id="peer-copy" hidden>Copy Offer</button>
+                <button id="peer-offer-accept" hidden>Accept Offer</button>                
+            </div>
+        </div>
         <script src="/scripts/socket.js"></script>
         <script src="/scripts/peer.js"></script>
         <script src="/scripts/main.js"></script>
