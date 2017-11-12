@@ -13,7 +13,6 @@
     var peerPageButtons = null;
 
     function onSignalerMessage(message) {
-        console.log(message);
         if (message.desc) {
             switch (message.desc.type) {
                 case 'offer':
