@@ -57,33 +57,22 @@
         peerPageButtonContainer.hidden = false;
     }
 
-    function onOfferAcceptClick() {
-        var offerInfo = Helpers.tryParseJSON(sdpOfferText.value);
-        var offer = offerInfo[0];
-        var candidateEvents = offerInfo.slice(1);
-        if (offer) {
-            offerAcceptButton.disabled = true;
-            peer.acceptOffer(offer);
+    function onAcceptClick(textArea, event) {
+        var sdpInfo = Helpers.tryParseJSON(textArea.value);
+        var sdp = sdpInfo[0];
+        var candidateEvents = sdpInfo.slice(1);
+        if (sdp) {
+            event.target.disabled = true;
+            if (sdp.type === 'offer') {
+                peer.acceptOffer(sdp);                
+            } else {
+                peer.acceptAnswer(sdp);
+            }
             candidateEvents.forEach(function (candidateEvent) {
                 peer.acceptCandidate(candidateEvent.candidate);
             });
         } else {
-            console.error('Invalid offer');
-        }
-    }
-
-    function onAcceptAnswerClick() {
-        var answerInfo = Helpers.tryParseJSON(sdpAnswerText.value);
-        var answer = answerInfo[0];
-        var candidateEvents = answerInfo.slice(1);        
-        if (answer) {
-            answerAcceptButton.disabled = true;
-            peer.acceptAnswer(answer);
-            candidateEvents.forEach(function (candidateEvent) {
-                peer.acceptCandidate(candidateEvent.candidate);
-            });
-        } else {
-            console.error('Invalid answer');
+            console.error('Invalid sdp', sdp);
         }
     }
 
@@ -141,10 +130,10 @@
         peerPageButtons = document.querySelectorAll('.peer-page-button');
 
         offerCreateButton.onclick = onOfferCreateClick;
-        offerAcceptButton.onclick = onOfferAcceptClick;
+        offerAcceptButton.onclick = onAcceptClick.bind(null, sdpOfferText);
+        answerAcceptButton.onclick =  onAcceptClick.bind(null, sdpAnswerText);
         offerCopyButton.onclick = onCopyClick.bind(null, sdpOfferText);
-        answerCopyButton.onclick = onCopyClick.bind(null, sdpOfferText);
-        answerAcceptButton.onclick = onAcceptAnswerClick;        
+        answerCopyButton.onclick = onCopyClick.bind(null, sdpOfferText);        
         sdpOfferText.onclick = onTextAreaClick;
         sdpOfferText.oninput = onOfferTextAreaInput;        
         sdpAnswerText.onclick = onTextAreaClick;
