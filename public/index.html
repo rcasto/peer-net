@@ -5,14 +5,28 @@
         <link rel="stylesheet" href="/styles/main.css" />
     </head>
     <body>
-        <div id="peer-container">
-            <textarea id="peer-sdp" placeholder="Paste offer SDP of peer if you wish"></textarea>
-            <div id="peer-buttons">
-                <button id="peer-offer">Create Offer</button>
-                <button id="peer-copy" hidden>Copy Offer</button>
-                <button id="peer-offer-accept" hidden>Accept Offer</button>                
+        <div class="peer-container">
+            <div class="peer-page peer-page-offer">
+                <textarea class="peer-sdp peer-sdp-offer" placeholder="Paste Offer SDP of peer here or generate it by clicking the button below"></textarea>
+                <div class="peer-buttons">
+                    <button class="peer-button peer-offer-create">Create Offer</button>
+                    <button class="peer-button peer-offer-accept" hidden>Accept Offer</button>
+                    <button class="peer-button peer-offer-copy" hidden>Copy Offer</button>                        
+                    <button class="peer-button peer-answer-copy" hidden>Copy Answer</button>                    
+                </div>
+            </div>
+            <div class="peer-page peer-page-answer" hidden>
+                <textarea class="peer-sdp peer-sdp-answer" placeholder="Paste Answer SDP of peer here"></textarea>
+                <div class="peer-buttons">
+                    <button class="peer-button peer-answer-accept">Accept Answer</button>                        
+                </div>
+            </div>
+            <div class="peer-page-buttons" hidden>
+                <button class="peer-page-button active"></button>
+                <button class="peer-page-button"></button>
             </div>
         </div>
+        <script src="/scripts/helpers.js"></script>
         <script src="/scripts/socket.js"></script>
         <script src="/scripts/peer.js"></script>
         <script src="/scripts/main.js"></script>
