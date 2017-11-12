@@ -1,6 +1,15 @@
 var Peer = (function () {
     var configuration = { 
-        iceServers: [{ urls: "stun:stun.l.google.com:19302" }] 
+        iceServers: [{ 
+            urls: [
+                'stun:stun.l.google.com:19302',
+                'stun:stun1.l.google.com:19302',
+                'stun:stun2.l.google.com:19302',
+                'stun:stun3.l.google.com:19302',
+                'stun:stun4.l.google.com:19302',
+                'stun:numb.viagenie.ca:3478'
+            ]
+        }] 
     };
     var channelName = 'peer-net';
 
@@ -58,9 +67,11 @@ var Peer = (function () {
                 return self.peer.setLocalDescription(answer);
             })
             .then(function () {
+                var localDescription = self.peer.localDescription;
                 self.signalCb({ 
-                    desc: self.peer.localDescription 
+                    desc: localDescription
                 });
+                return localDescription;
             })
             .catch(logError);
     };
