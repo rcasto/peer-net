@@ -1,7 +1,16 @@
 (function () {
     var peer = new Peer(onSignalerMessage);
-    var offerAnswerButton = null;
-    var sdpTextArea = null;
+    var offerCreateButton = null;
+    var offerAcceptButton = null;
+    var offerCopyButton = null;
+    var answerCopyButton = null;
+    var sdpOfferText = null;
+    var sdpAnswerText = null;
+    var answerAcceptButton = null;
+    var peerPageButtonContainer = null;
+    var activePeerPageButton = null;
+    var peerPages = null;
+    var peerPageButtons = null;
 
     function onSignalerMessage(message) {
         console.log(message);
@@ -9,11 +18,16 @@
             switch (message.desc.type) {
                 case 'offer':
                     console.log('Offer generated');
-                    sdpTextArea.readOnly = true;
-                    appendTextToTextArea(JSON.stringify(message.desc));
+                    sdpOfferText.readOnly = true;
+                    appendTextToTextArea(sdpOfferText, JSON.stringify(message.desc));
                     break;
                 case 'answer':
                     console.log('Answer generated');
+                    sdpOfferText.value = '';
+                    sdpOfferText.readOnly = true;
+                    offerAcceptButton.hidden = true;
+                    answerCopyButton.hidden = false;
+                    appendTextToTextArea(sdpOfferText, JSON.stringify(message.desc));
                     break;
                 default:
                     console.error('Invalid message: ' + message);
@@ -23,70 +37,110 @@
         }
     }
 
-    function tryParseJSON(data) {
-        try {
-            return JSON.parse(data);
-        } catch(error) {
-            return null;
-        }
-    }
-
-    function appendTextToTextArea(text) {
-        var currentText = sdpTextArea.value, currentJSON;
+    function appendTextToTextArea(textArea, text) {
+        var currentText = textArea.value, currentJSON;
         if (currentText) {
-            currentJSON = tryParseJSON(currentText);
+            currentJSON = Helpers.tryParseJSON(currentText);
             if (currentJSON) {
                 currentJSON = [currentJSON, text];
-                sdpTextArea.value = JSON.stringify(currentJSON);
+                textArea.value = JSON.stringify(currentJSON);
             } else {
-                sdpTextArea.value += text;
+                textArea.value += text;
             }
         } else {
-            sdpTextArea.value = text;
+            textArea.value = text;
         }
     }
 
-    function onOfferClick() {
+    function onOfferCreateClick() {
         peer.connect();
-        offerButton.hidden = true;
-        copyButton.hidden = false;
+        offerCreateButton.hidden = true;
+        offerCopyButton.hidden = false;
+        peerPageButtonContainer.hidden = false;
     }
 
-    function onCopyClick() {
-        sdpTextArea.select();
+    function onOfferAcceptClick() {
+        var offer = Helpers.tryParseJSON(sdpOfferText.value);
+        if (offer) {
+            offerAcceptButton.disabled = true;
+            peer.acceptOffer(offer);
+        } else {
+            console.error('Invalid offer');
+        }
+    }
+
+    function onAcceptAnswerClick() {
+        var answer = Helpers.tryParseJSON(sdpAnswerText.value);
+        if (answer) {
+            answerAcceptButton.disabled = true;
+            peer.acceptAnswer(answer);
+        } else {
+            console.error('Invalid answer');
+        }
+    }
+
+    function onCopyClick(textArea) {
+        textArea.select();
         document.execCommand('copy');
     }
 
-    function onAcceptOfferClick() {
-        
+    function onTextAreaClick(event) {
+        event.target.select();
     }
 
-    function onTextAreaClick() {
-        sdpTextArea.select();
-    }
-
-    function onTextAreaInput() {
-        var text = sdpTextArea.value;
-        offerButton.hidden = !!text;
+    function onOfferTextAreaInput(event) {
+        var text = event.target.value;
+        offerCreateButton.hidden = !!text;
         offerAcceptButton.hidden = !text;
     }
 
-    /*
-     * Interesting idea: Based on whether the client is actually on or not, default the mode.
-     * If the user is offline, start in offline mode.  Allow the user toggle modes, but default
-     * based on their coming in state
-     */
+    function onAnswerTextAreaInput(event) {
+        var text = event.target.value;
+        answerAcceptButton.disabled = !text;
+    }
+
+    function onPeerPageClick(event) {
+        var currentPage, clickedPage;
+        if (event.target === activePeerPageButton) {
+            return;
+        }
+        peerPageButtons.forEach(function (peerPageButton, i) {
+            if (peerPageButton === activePeerPageButton) {
+                currentPage = i;
+            }
+            if (peerPageButton === event.target) {
+                clickedPage = i;
+            }
+        });
+        Helpers.removeClass(activePeerPageButton, 'active');
+        Helpers.addClass(event.target, 'active');
+        peerPages[currentPage].hidden = true;
+        peerPages[clickedPage].hidden = false;
+        activePeerPageButton = event.target;
+    }
+
     window.onload = function () {
-        offerButton = document.getElementById('peer-offer');
-        copyButton = document.getElementById('peer-copy');
-        offerAcceptButton = document.getElementById('peer-offer-accept');      
-        sdpTextArea = document.getElementById('peer-sdp');
+        offerCreateButton = document.querySelector('.peer-offer-create');
+        offerAcceptButton = document.querySelector('.peer-offer-accept');
+        offerCopyButton = document.querySelector('.peer-offer-copy');
+        answerCopyButton = document.querySelector('.peer-answer-copy');
+        sdpOfferText = document.querySelector('.peer-sdp-offer');
+        sdpAnswerText = document.querySelector('.peer-sdp-answer');
+        answerAcceptButton = document.querySelector('.peer-answer-accept');
+        peerPageButtonContainer = document.querySelector('.peer-page-buttons');
+        activePeerPageButton = document.querySelector('.peer-page-button.active');
+        peerPages = document.querySelectorAll('.peer-page');
+        peerPageButtons = document.querySelectorAll('.peer-page-button');
 
-        offerButton.onclick = onOfferClick;
-        copyButton.onclick = onCopyClick;
-        offerAcceptButton.onclick = onAcceptOfferClick;
-
-        sdpTextArea.onclick = onTextAreaClick;
-        sdpTextArea.oninput = onTextAreaInput;
+        offerCreateButton.onclick = onOfferCreateClick;
+        offerAcceptButton.onclick = onOfferAcceptClick;
+        offerCopyButton.onclick = onCopyClick.bind(null, sdpOfferText);
+        answerCopyButton.onclick = onCopyClick.bind(null, sdpOfferText);
+        answerAcceptButton.onclick = onAcceptAnswerClick;        
+        sdpOfferText.onclick = onTextAreaClick;
+        sdpOfferText.oninput = onOfferTextAreaInput;        
+        sdpAnswerText.onclick = onTextAreaClick;
+        sdpAnswerText.oninput = onAnswerTextAreaInput;
+        peerPageButtonContainer.onclick = onPeerPageClick;
     };
 }());

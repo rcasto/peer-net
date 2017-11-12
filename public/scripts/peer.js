@@ -46,6 +46,26 @@ var Peer = (function () {
                 })
                 .catch(logError);
         };
+
+        this.peer.onsignalingstatechange = function () {
+            console.log('signal state changed', this.signalingState);
+        };
+
+        this.peer.oniceconnectionstatechange = function () {
+            console.log('ice connection state change', this.iceConnectionState);
+        };
+
+        this.peer.onicegatheringstatechange	= function () {
+            console.log('ice gathering state change', this.iceGatheringState);
+        };
+
+        this.peer.onicecandidateerror = function () {
+            console.error('ice candidate error');
+        };
+
+        this.peer.onconnectionstatechange = function () {
+            console.log('connection state change');
+        };
     }
 
     Peer.prototype.connect = function () {

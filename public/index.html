@@ -6,7 +6,7 @@
     </head>
     <body>
         <div class="peer-container">
-            <div class="peer-page peer-page-offer">
+            <div class="peer-page">
                 <textarea class="peer-sdp peer-sdp-offer" placeholder="Paste Offer SDP of peer here or generate it by clicking the button below"></textarea>
                 <div class="peer-buttons">
                     <button class="peer-button peer-offer-create">Create Offer</button>
@@ -15,10 +15,10 @@
                     <button class="peer-button peer-answer-copy" hidden>Copy Answer</button>                    
                 </div>
             </div>
-            <div class="peer-page peer-page-answer" hidden>
+            <div class="peer-page" hidden>
                 <textarea class="peer-sdp peer-sdp-answer" placeholder="Paste Answer SDP of peer here"></textarea>
                 <div class="peer-buttons">
-                    <button class="peer-button peer-answer-accept">Accept Answer</button>                        
+                    <button class="peer-button peer-answer-accept" disabled>Accept Answer</button>                        
                 </div>
             </div>
             <div class="peer-page-buttons" hidden>

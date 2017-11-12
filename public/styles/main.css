@@ -1,24 +1,53 @@
 *, *:before, *:after {
     box-sizing: border-box;
 }
-#peer-container {
+
+.peer-container {
     width: 480px;
     max-width: 100%;
     margin: 0 auto;
 }
-#peer-header {
-    display: inline-block;
-    margin-bottom: 6px;
-}
-#peer-sdp {
+
+.peer-sdp {
     display: block;
     height: 320px;
     margin-bottom: 6px;
     resize: none;
 }
-#peer-sdp:read-only {
+.peer-sdp:read-only {
     opacity: 0.4;
 }
-#peer-offer, #peer-copy, #peer-offer-accept, #peer-sdp {
+
+.peer-button, .peer-sdp {
     width: 100%;
+}
+
+.peer-page-buttons {
+    font-size: 0;
+    width: 20px;
+    margin: 6px auto 0 auto;
+}
+
+.peer-page-button {
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 3px;
+    background-color: inherit;
+}
+.peer-page-button:hover {
+    background-color: black;
+    opacity: 0.4;
+}
+.peer-page-button.active {
+    background-color: black;
+}
+.peer-page-button.active:hover {
+    opacity: 1;
+}
+.peer-page-button:first-of-type {
+    margin-right: 2px;    
+}
+
+.peer-button, .peer-page-button {
+    cursor: pointer;
 }
