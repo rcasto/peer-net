@@ -27,9 +27,12 @@ var Peer = (function () {
 
         // send any ice candidates to the other peer
         this.peer.onicecandidate = function (event) {
-            self.signalCb({
-                candidate: event.candidate 
-            });
+            if (event.candidate) {
+                self.signalCb({
+                    candidate: event.candidate,
+                    type: 'candidate'
+                });
+            }
         };
 
         // let the "negotiationneeded" event trigger offer generation

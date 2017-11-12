@@ -32,23 +32,21 @@
                 default:
                     console.error('Invalid message: ' + message);
             }
-        } else if (message.candidate) {
-            appendTextToTextArea(JSON.stringify(message));
+        } else if (message.type === 'candidate') {
+            appendTextToTextArea(sdpOfferText, JSON.stringify(message));
         }
     }
 
     function appendTextToTextArea(textArea, text) {
-        var currentText = textArea.value, currentJSON;
+        var currentText = textArea.value, currentJSONArray;
         if (currentText) {
-            currentJSON = Helpers.tryParseJSON(currentText);
-            if (currentJSON) {
-                currentJSON = [currentJSON, text];
+            currentJSONArray = Helpers.tryParseJSON(currentText);
+            if (currentJSONArray) {
+                currentJSONArray.push(Helpers.tryParseJSON(text));                
                 textArea.value = JSON.stringify(currentJSON);
-            } else {
-                textArea.value += text;
             }
         } else {
-            textArea.value = text;
+            textArea.value = JSON.stringify([Helpers.tryParseJSON(text)]);
         }
     }
 
@@ -60,20 +58,30 @@
     }
 
     function onOfferAcceptClick() {
-        var offer = Helpers.tryParseJSON(sdpOfferText.value);
+        var offerInfo = Helpers.tryParseJSON(sdpOfferText.value);
+        var offer = offerInfo[0];
+        var candidateEvents = offerInfo.slice(1);
         if (offer) {
             offerAcceptButton.disabled = true;
             peer.acceptOffer(offer);
+            candidateEvents.forEach(function (candidateEvent) {
+                peer.acceptCandidate(candidateEvent.candidate);
+            });
         } else {
             console.error('Invalid offer');
         }
     }
 
     function onAcceptAnswerClick() {
-        var answer = Helpers.tryParseJSON(sdpAnswerText.value);
+        var answerInfo = Helpers.tryParseJSON(sdpAnswerText.value);
+        var answer = answerInfo[0];
+        var candidateEvents = answerInfo.slice(1);        
         if (answer) {
             answerAcceptButton.disabled = true;
             peer.acceptAnswer(answer);
+            candidateEvents.forEach(function (candidateEvent) {
+                peer.acceptCandidate(candidateEvent.candidate);
+            });
         } else {
             console.error('Invalid answer');
         }
