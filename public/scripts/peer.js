@@ -9,15 +9,11 @@ var Peer = (function () {
     };
     var channelName = 'peer-net';
 
-    function Peer(signalCb) {
+    function Peer(signalCb, logger) {
         var self = this;
 
-        if (typeof signalCb !== 'function') {
-            console.error('Peer constructor parameter must be a function - signal callback');
-            return;
-        }
-
         this.signalCb = signalCb;
+        this.logger = logger || console;
         this.peer = new RTCPeerConnection(configuration);
         this.channel = null;
 
@@ -43,27 +39,27 @@ var Peer = (function () {
                         desc: self.peer.localDescription 
                     });
                 })
-                .catch(logError);
+                .catch(self.logger.error.bind(self.logger));
         };
 
         this.peer.onsignalingstatechange = function () {
-            console.log('signal state changed', this.signalingState);
+            self.logger.log('signal state changed: ' + self.peer.signalingState);
         };
 
         this.peer.oniceconnectionstatechange = function () {
-            console.log('ice connection state change', this.iceConnectionState);
+            self.logger.log('ice connection state change: ' + self.peer.iceConnectionState);
         };
 
         this.peer.onicegatheringstatechange	= function () {
-            console.log('ice gathering state change', this.iceGatheringState);
+            self.logger.log('ice gathering state change: ' + self.peer.iceGatheringState);
         };
 
         this.peer.onicecandidateerror = function () {
-            console.error('ice candidate error');
+            self.logger.error('ice candidate error');
         };
 
         this.peer.onconnectionstatechange = function () {
-            console.log('connection state change');
+            self.logger.log('connection state change');
         };
     }
 
@@ -92,33 +88,29 @@ var Peer = (function () {
                 });
                 return localDescription;
             })
-            .catch(logError);
+            .catch(this.logger.error.bind(this.logger));
     };
 
     Peer.prototype.acceptAnswer = function (answer) {
         return this.peer.setRemoteDescription(answer)
-            .catch(logError);        
+            .catch(this.logger.error.bind(this.logger));        
     };
 
 
     Peer.prototype.acceptCandidate = function (candidate) {
         return this.peer.addIceCandidate(candidate)
-            .catch(logError);        
+            .catch(this.logger.error.bind(this.logger));        
     };
 
     /*
      * Private functions
      */
-    function logError(error) {
-        console.error('An error occurred: ' + JSON.stringify(error));
-    }
-
     function addDataChannelHandlers(peer) {
         peer.channel.onopen = function () {
-            console.log('Data channel opened');
+            peer.logger.log('Data channel opened');
         };
         peer.channel.onmessage = function (event) {
-            console.log('Message received: ' + event.data);
+            peer.logger.log('Message received: ' + event.data);
         };
     }
 

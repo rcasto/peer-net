@@ -9,43 +9,59 @@
 }
 
 .peer-sdp {
-    display: block;
-    height: 320px;
     margin-bottom: 6px;
+}
+
+.peer-log {
+    margin-top: 6px;
+    background-color: black;
+    overflow-y: auto;
+}
+.peer-log-info {
+    color: white;
+}
+.peer-log-error {
+    color: red;
+}
+
+
+.peer-sdp, .peer-log {
+    display: block;
+    height: 120px;
     resize: none;
 }
 .peer-sdp:read-only {
     opacity: 0.4;
 }
 
-.peer-button, .peer-sdp {
+.peer-button, .peer-sdp, .peer-log {
     width: 100%;
 }
 
 .peer-page-buttons {
     font-size: 0;
-    width: 20px;
+    width: 28px;
     margin: 6px auto 0 auto;
 }
 
 .peer-page-button {
     border: 1px solid black;
     border-radius: 50%;
-    padding: 3px;
+    padding: 5px;
     background-color: inherit;
 }
-.peer-page-button:hover {
+.peer-page-button:hover, .peer-page-button:focus {
     background-color: black;
     opacity: 0.4;
 }
 .peer-page-button.active {
     background-color: black;
 }
-.peer-page-button.active:hover {
+.peer-page-button.active:hover, .peer-page-button.active:focus {
     opacity: 1;
 }
 .peer-page-button:first-of-type {
-    margin-right: 2px;    
+    margin-right: 4px;    
 }
 
 .peer-button, .peer-page-button {

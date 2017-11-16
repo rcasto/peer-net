@@ -1,5 +1,7 @@
 (function () {
-    var peer = new Peer(onSignalerMessage);
+    var peer = null;
+    var logger = null;
+
     var offerCreateButton = null;
     var offerAcceptButton = null;
     var offerCopyButton = null;
@@ -11,17 +13,18 @@
     var activePeerPageButton = null;
     var peerPages = null;
     var peerPageButtons = null;
+    var peerLog = null;
 
     function onSignalerMessage(message) {
         if (message.desc) {
             switch (message.desc.type) {
                 case 'offer':
-                    console.log('Offer generated');
+                    logger.log('Offer generated');
                     sdpOfferText.readOnly = true;
                     appendTextToTextArea(sdpOfferText, JSON.stringify(message.desc));
                     break;
                 case 'answer':
-                    console.log('Answer generated');
+                    logger.log('Answer generated');
                     sdpOfferText.value = '';
                     sdpOfferText.readOnly = true;
                     offerAcceptButton.hidden = true;
@@ -29,23 +32,10 @@
                     appendTextToTextArea(sdpOfferText, JSON.stringify(message.desc));
                     break;
                 default:
-                    console.error('Invalid message: ' + message);
+                    logger.error('Invalid message: ' + message);
             }
         } else if (message.type === 'candidate') {
             appendTextToTextArea(sdpOfferText, JSON.stringify(message));
-        }
-    }
-
-    function appendTextToTextArea(textArea, text) {
-        var currentText = textArea.value, currentJSONArray;
-        if (currentText) {
-            currentJSONArray = Helpers.tryParseJSON(currentText);
-            if (currentJSONArray) {
-                currentJSONArray.push(Helpers.tryParseJSON(text));                
-                textArea.value = JSON.stringify(currentJSONArray);
-            }
-        } else {
-            textArea.value = JSON.stringify([Helpers.tryParseJSON(text)]);
         }
     }
 
@@ -108,11 +98,26 @@
                 clickedPage = i;
             }
         });
-        Helpers.removeClass(activePeerPageButton, 'active');
-        Helpers.addClass(event.target, 'active');
-        peerPages[currentPage].hidden = true;
-        peerPages[clickedPage].hidden = false;
-        activePeerPageButton = event.target;
+        if (typeof clickedPage !== 'undefined') {
+            Helpers.removeClass(activePeerPageButton, 'active');
+            Helpers.addClass(event.target, 'active');
+            peerPages[currentPage].hidden = true;            
+            peerPages[clickedPage].hidden = false;
+            activePeerPageButton = event.target;            
+        }
+    }
+
+    function appendTextToTextArea(textArea, text) {
+        var currentText = textArea.value, currentJSONArray;
+        if (currentText) {
+            currentJSONArray = Helpers.tryParseJSON(currentText);
+            if (currentJSONArray) {
+                currentJSONArray.push(Helpers.tryParseJSON(text));                
+                textArea.value = JSON.stringify(currentJSONArray);
+            }
+        } else {
+            textArea.value = JSON.stringify([Helpers.tryParseJSON(text)]);
+        }
     }
 
     window.onload = function () {
@@ -127,6 +132,10 @@
         activePeerPageButton = document.querySelector('.peer-page-button.active');
         peerPages = document.querySelectorAll('.peer-page');
         peerPageButtons = document.querySelectorAll('.peer-page-button');
+        peerLog = document.querySelector('.peer-log');
+
+        logger = new Logger(peerLog);
+        peer = new Peer(onSignalerMessage, logger);
 
         offerCreateButton.onclick = onOfferCreateClick;
         offerAcceptButton.onclick = onAcceptClick.bind(null, sdpOfferText);
