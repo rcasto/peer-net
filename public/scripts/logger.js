@@ -7,13 +7,18 @@ var Logger = (function () {
 
     Logger.prototype.log = function (message) {
         var log = createLogElement(message, 'peer-log-info');
-        this.logContainer.appendChild(log);
+        appendLogElement(this.logContainer, log);
     };
 
     Logger.prototype.error = function (error) {
         var errorLog = createLogElement('An error occurred: ' + error, 'peer-log-error');
-        this.logContainer.appendChild(errorLog);
+        appendLogElement(this.logContainer, errorLog);
     };
+
+    function appendLogElement(container, log) {
+        container.appendChild(log);
+        container.scrollTop = container.scrollHeight;
+    }
 
     function createLogElement(data, logClass) {
         var div = document.createElement('div');
