@@ -106,8 +106,10 @@ var Peer = (function () {
      * Private functions
      */
     function addDataChannelHandlers(peer) {
+        var random = Math.floor(Math.random() * 1000);
         peer.channel.onopen = function () {
-            peer.logger.log('Data channel opened');
+            peer.logger.log('Data channel opened: ' + random);
+            peer.channel.send('connected: ' + random);
         };
         peer.channel.onmessage = function (event) {
             peer.logger.log('Message received: ' + event.data);
