@@ -6,6 +6,7 @@
     </head>
     <body>
         <div class="peer-container">
+            <h2 class="peer-header">PeerNet - Peer Connection without a server</h2>
             <div class="peer-page">
                 <textarea class="peer-sdp peer-sdp-offer" placeholder="Paste Offer SDP of peer here or generate it by clicking the button below"></textarea>
                 <div class="peer-buttons">
@@ -25,7 +26,23 @@
                 <button class="peer-page-button active"></button>
                 <button class="peer-page-button"></button>
             </div>
-            <div class="peer-log"></div>            
+            <div class="peer-log"></div>
+            <div class="peer-info">
+                <h2>How this works</h2>
+                <p>If you want to accept a connection from someone:</p>
+                <ol>
+                    <li>Paste offer received into the text area and accept it</li>
+                    <li>Send the answer back to who sent you the offer, they will need to accept it</li>
+                    <li>You should now be connected!</li>
+                </ol>
+                <p>If you want to initiate a connection:</p>
+                <ol>
+                    <li>Create an offer</li>
+                    <li>Send the offer to who you want to connect to, they will send you back an answer</li>
+                    <li>Paste the answer you receive into the text area and accept it</li>
+                    <li>You should now be connected!</li>
+                </ol>
+            </div>           
         </div>
         <script src="/webrtc-adapter/out/adapter.js"></script>
         <script src="/scripts/helpers.js"></script>
