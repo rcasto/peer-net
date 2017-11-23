@@ -27,3 +27,18 @@ Utilize an Azure Blob to hold data pertinent to establishing a connection
 * ICE Candidates
 
 Can you gather (offer or answer) + all ICE candidates in one go?
+
+Azure queue to hold offers
+Need a way to send an answer to the specific peer from which the offer came
+
+Steps to connect to network
+
+If there is an offer in the queue:
+1. Take the first entry from the queue and accept it's offer locally
+2. Submit answer to blob using 
+
+
+If there is not an offer in the queue:
+1. User generates a random id and saves it locally
+2. User creates offer
+3. User submits offer and random id to queue as one object
