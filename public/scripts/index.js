@@ -1,3 +1,5 @@
+import './adapter';
+
 import Peer from './peer';
 import Logger from './logger';
 import Helpers from './helpers';

@@ -1,19 +1,33 @@
 {
   "name": "peernet",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Peer connection without a server",
+  "main": "public/scripts/index.js",
   "scripts": {
-    "build": "parcel build public/index.html --out-dir dist --target browser",
-    "start": "parcel public/index.html -p 3000",
-    "clean": "rimraf .cache dist"
+    "build": "npm-run-all clean:build build:vendor build:parcel build:inline build:cleanup build:rename",
+    "build:parcel": "parcel build public/index.html --out-dir dist --target browser",
+    "build:vendor": "ncp node_modules/webrtc-adapter/out/adapter.js public/scripts/adapter.js",
+    "build:inline": "html-inline dist/index.html > dist/index.inline.html",
+    "build:cleanup": "npm-run-all clean:vendor && rimraf dist/*.js dist/*.css dist/*.map dist/index.html",
+    "build:rename": "ncp dist/index.inline.html dist/index.html && rimraf dist/index.inline.html",
+    "start": "npm-run-all build:vendor start:parcel",
+    "start:parcel": "parcel public/index.html -p 3000",
+    "clean": "npm-run-all --parallel clean:*",
+    "clean:build": "rimraf dist",
+    "clean:vendor": "rimraf public/scripts/adapter.js",
+    "clean:parcel": "rimraf .cache",
+    "clean:modules": "rimraf node_modules"
   },
   "author": "Richie Casto",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "webrtc-adapter": "^6.1.5"
+  },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
     "html-inline": "^1.2.0",
+    "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.2",
     "parcel-bundler": "^1.7.1",
     "rimraf": "^2.6.2"
   }
