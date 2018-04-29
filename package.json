@@ -19,7 +19,7 @@
     "clean:modules": "rimraf node_modules"
   },
   "author": "Richie Casto",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "webrtc-adapter": "^6.1.5"
   },
