@@ -13,8 +13,10 @@
     "webrtc-adapter": "^6.1.5"
   },
   "devDependencies": {
+    "css-loader": "^0.28.11",
     "html-webpack-inline-source-plugin": "0.0.10",
     "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.21.0",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15"
   }
