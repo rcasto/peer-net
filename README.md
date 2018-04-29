@@ -1,7 +1,7 @@
 # peer-net
-Uses [WebRTC](https://www.w3.org/TR/webrtc/) to connect peers together
+Goal: Connect peers without the need for a central server
 
-Goal is to allow peers to connect without the need for a central server
+Uses [WebRTC](https://www.w3.org/TR/webrtc/) to connect peers together, which in turn necessitates the concept of a ["signaling server"](http://www.webrtc-experiment.com/docs/WebRTC-Signaling-Concepts.html).  In our case it's currently just copy/paste and use your channel of choice to share the connection information.
 
 ## Getting Up & Running
 ### Prerequisites
@@ -18,5 +18,5 @@ Goal is to allow peers to connect without the need for a central server
 
 ## Current Limitations
 - Must copy/paste and find outside channel to send offer/answer to other peer
-  - It's does not occur conveniently within the app
-- Only connects 1 peer to another peer, does not allow multiple connections building up a network...yet
+- Only connects 1 peer to another peer, does not allow multiple connections building up a network
+- Does not allow additional data exchange after initial connection
