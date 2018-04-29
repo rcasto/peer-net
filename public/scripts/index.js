@@ -2,8 +2,6 @@ import Peer from './peer';
 import Logger from './logger';
 import Helpers from './helpers';
 
-import style from '../styles/index.css';
-
 var peer = null;
 var logger = null;
 
