@@ -10,6 +10,6 @@
   "author": "Richie Casto",
   "license": "ISC",
   "dependencies": {
-    "webrtc-adapter": "^6.0.0"
+    "webrtc-adapter": "^6.1.5"
   }
 }
