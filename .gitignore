@@ -1,4 +1,5 @@
 node_modules
-dist
+dist/*
+!dist/index.html
 .cache
 public/scripts/adapter.js
