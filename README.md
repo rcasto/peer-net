@@ -3,6 +3,8 @@ Goal: Connect peers without the need for a central server
 
 Uses [WebRTC](https://www.w3.org/TR/webrtc/) to connect peers together, which in turn necessitates the concept of a ["signaling server"](http://www.webrtc-experiment.com/docs/WebRTC-Signaling-Concepts.html).  In our case it's currently just copy/paste and use your channel of choice to share the connection information.
 
+[Give it a shot!](https://cdn.rawgit.com/rcasto/peer-net/master/dist/index.html)
+
 ## Getting Up & Running
 ### Prerequisites
 - [Git](https://git-scm.com/downloads)
